@@ -46,6 +46,19 @@ require([
         //     }),
         //   }),
         // });
+        var textSymbol = new TextSymbol({
+          color: "white",
+          haloColor: "black",
+          haloSize: "1px",
+          text: "You are here",
+          xoffset: 3,
+          yoffset: 3,
+          font: {  // autocast as esri/symbols/Font
+            size: 12,
+            family: "sans-serif",
+            weight: "bolder"
+          }
+        });
 
         var renderer = new UniqueValueRenderer({
           field: "DIST_CODE",
@@ -63,6 +76,12 @@ require([
         renderer.addUniqueValueInfo("45",
           new SimpleFillSymbol({
             color: "blue"
+          })
+        );
+
+        renderer.addUniqueValueInfo("01",
+          new SimpleFillSymbol({
+            color: "red"
           })
         );
 
