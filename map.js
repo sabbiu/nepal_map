@@ -9,8 +9,10 @@ require([
 
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
+        "esri/renderers/UniqueValueRenderer",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
+    "esri/symbols/TextSymbol",
     "esri/Color",
     "dojo/on",
         "dojo/domReady!"
@@ -18,7 +20,9 @@ require([
       function(
         Map, MapView,SceneView,
         FeatureLayer,
-        SimpleRenderer, SimpleFillSymbol, SimpleLineSymbol, Color,
+        SimpleRenderer, UniqueValueRenderer, 
+        SimpleFillSymbol, SimpleLineSymbol,
+        TextSymbol, Color,
         on
       ) {
 
@@ -31,14 +35,55 @@ require([
         //   layerId: 0,
         // });
         
+        // var renderer = new SimpleRenderer({
+        //   symbol: new SimpleFillSymbol({
+        //     style: SimpleFillSymbol.STYLE_SOLID,
+        //     color: new Color([0,128,0, 0.5]),
+        //     outline: new SimpleLineSymbol({
+        //       style: SimpleLineSymbol.STYLE_SOLID,
+        //       color: new Color([128,0,0,1]),
+        //       width: 2
+        //     }),
+        //   }),
+        // });
+
+        var renderer = new UniqueValueRenderer({
+          field: "DIST_CODE",
+          defaultSymbol: new SimpleFillSymbol({
+            style: SimpleFillSymbol.STYLE_SOLID,
+            color: new Color([0,128,0, 0.5]),
+            outline: new SimpleLineSymbol({
+              style: SimpleLineSymbol.STYLE_SOLID,
+              color: new Color([128,0,0,1]),
+              width: 2
+            }),
+          }),
+        });
+
+        renderer.addUniqueValueInfo("45",
+          new SimpleFillSymbol({
+            color: "blue"
+          })
+        );
+
         var featureLayer = new FeatureLayer({
           url: di_url,
-          renderer: new SimpleRenderer({
-            symbol: new SimpleFillSymbol({
-              style: SimpleFillSymbol.STYLE_SOLID,
-              color: new Color([0,128,0, 0.5]),
-            })
-          }),
+          renderer: renderer,
+          // labelsVisible: true,
+          // labelingInfo: [{
+          //   labelExpression: "[DIST_NAME]",
+          //   labelPlacement: "always-horizontal",
+          //   symbol: new TextSymbol({
+          //     color: [255, 255, 255, 0.7],
+          //     // haloColor: [0, 0, 0, 0.7],
+          //     // haloSize: 1,
+          //     font: {
+          //       size: 11
+          //     }
+          //   }),
+          //   minScale: 9250000,
+          //   maxScale: 2400000
+          // }],
           id: 'nam',
           opacity: 1,
           visible: true,
